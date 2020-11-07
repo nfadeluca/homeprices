@@ -6,10 +6,8 @@ import pandas as pd
 # You can find your authentication key in your Quandl account settings
 quandl.ApiConfig.api_key = "s6x8gXSardesDec_nbyH"
 
-# This is how we plot our x's and y's using matplotlib
-plt.plot([1,2,3],[5,7,4])
-plt.show()
 
 # Making use of Zillow data
-data = quandl.get_table('ZILLOW/DATA', indicator_id='ZSFH', region_id='99999')
-print(data)
+df = quandl.get_table('ZILLOW/DATA', indicator_id='ZSFH', region_id='99999')
+print(df['date'].head())
+#print(df.head())
