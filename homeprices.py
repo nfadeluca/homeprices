@@ -1,6 +1,6 @@
 import quandl
 import matplotlib.pyplot as plt
-
+import pandas as pd
 
 # This authenticates your account so that you may use data from Quandl
 # You can find your authentication key in your Quandl account settings

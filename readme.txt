@@ -1,2 +1,1 @@
-  Help
-  change
+This project should pull home price data from zillow and then plot it against a map of the US
