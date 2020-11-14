@@ -36,5 +36,5 @@ def sortData():
     df = df.sort_values(by='value')
     return df
 
-df = sortData()
-print(df.head())
+sortData()['value'].plot(kind='hist', bins=100, grid=True, range=[0, 1000000])
+plt.show()
