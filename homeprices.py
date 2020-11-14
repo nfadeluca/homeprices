@@ -19,7 +19,15 @@ def pullDataSubset():
     #index = False gets rid of the first column
     df.to_csv("ZILLOW_JAN.csv", index = False)
     print("File copied!")
-    #This
     df = df.copy()[df['indicator_id'] == 'ZATT']
     df.to_csv("ZILLOW_ZATT.csv", index = False)
     print("File copied!")
+
+
+df = pd.read_csv("ZILLOW_ZATT.csv")
+# df['value'].replace(',','.', regex=True).astype(float)
+df['value'] = df['value'].astype(float)
+# df['DataFrame Column'] = pd.to_numeric(df['DataFrame Column'],errors='coerce')
+df = df.sort_values(by='value')
+print(df.head())
+
