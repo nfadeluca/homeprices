@@ -9,6 +9,7 @@ import pandas as pd
 """
 This method reads the Zillow data file and then outputs a csv file containing
 only the home price data for a certain month and type of home
+@:returns Returns the unsorted but filtered dataframe
 """
 def pullDataSubset():
     print("Reading file")
@@ -22,12 +23,18 @@ def pullDataSubset():
     df = df.copy()[df['indicator_id'] == 'ZATT']
     df.to_csv("ZILLOW_ZATT.csv", index = False)
     print("File copied!")
+    return df
 
 
-df = pd.read_csv("ZILLOW_ZATT.csv")
-# df['value'].replace(',','.', regex=True).astype(float)
-df['value'] = df['value'].astype(float)
-# df['DataFrame Column'] = pd.to_numeric(df['DataFrame Column'],errors='coerce')
-df = df.sort_values(by='value')
+"""
+This method sorts the data and returns it
+@:returns The sorted dataframe
+"""
+def sortData():
+    df = pd.read_csv("ZILLOW_ZATT.csv")
+    df['value'] = pd.to_numeric(df['value'], errors='coerce')
+    df = df.sort_values(by='value')
+    return df
+
+df = sortData()
 print(df.head())
-
