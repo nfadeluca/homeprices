@@ -38,3 +38,4 @@ def sortData():
 
 sortData()['value'].plot(kind='hist', bins=100, grid=True, range=[0, 1000000])
 plt.show()
+#wow great
