@@ -44,27 +44,19 @@ def sortData():
 activate myenv to work with conda (for nick on visual studio)
 '''
 
-file_path = 'C:/Users/nfade/Documents/GitHub/homeprices/map/tl_2019_us_zcta510.shx'
-map_us = gpd.read_file(file_path)
+map_us = gpd.read_file('C:/Users/nfade/Documents/GitHub/homeprices/map/tl_2019_us_zcta510.shx')
 
 '''
-ZCTA5CE10       object
-GEOID10         object
-CLASSFP10       object
-MTFCC10         object
-FUNCSTAT10      object
-ALAND10          int64
-AWATER10         int64
-INTPTLAT10      object
-INTPTLON10      object
+ZCTA5CE10       object  2010 Census 5-digit ZIP Code Tabulation Area code
+GEOID10         object  2010 Census 5-digit ZIP Code Tabulation Area code
+CLASSFP10       object  2010 Census FIPS 55 class code
+MTFCC10         object  MAF/TIGER feature class code (G6350)
+FUNCSTAT10      object  2010 Census functional status
+ALAND10          int64  2010 Census land area
+AWATER10         int64  2010 Census water area
+INTPTLAT10      object  2010 Census latitude of the internal point
+INTPTLON10      object  2010 Census longitude of the internal point
 geometry      geometry
 '''
 
-
-fig, ax = plt.subplots(1, figsize=(15, 8))
-plt.title('Map of the United States Sub-Regions', size=16)
-map_us[(map_us['ALAND10']) & (map_us['ALAND10'])].plot(column='ZCTA5CE10',                                                    
-             cmap='Greens',      # Colormap for the states                     
-             linewidth=0.4,      # line width for state borders
-             ax=ax,              # plotting the map on 'ax'
-             edgecolor='black'); # State border colors
+print(map_us.head())
