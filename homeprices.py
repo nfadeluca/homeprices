@@ -3,7 +3,8 @@ import quandl
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy
-import geopandas as gpd 
+import geopandas as gpd
+from shapely import wkt
 
 
 # Making use of Zillow data
@@ -13,19 +14,21 @@ only the home price data for a certain month and type of home
 @:returns Returns the unsorted but filtered dataframe
 """
 def pullDataSubset():
-    print("Reading file")
+    print("Opening up")
     df = pd.read_csv("ZILLOW_DATA.csv")
-    print("File loaded!")
     #The date here is the date that will be outputted
     df = df.copy()[df['date'] == '2020-01-31']
     #index = False gets rid of the first column
     df.to_csv("ZILLOW_JAN.csv", index = False)
-    print("File copied!")
-    df = df.copy()[df['indicator_id'] == 'ZATT']
-    df.to_csv("ZILLOW_ZATT.csv", index = False)
-    print("File copied!")
-    return df
+    df = df.copy()[df['indicator_id'] == 'ZSFH']
 
+    #Adds a new column of the corresponding zip code
+    regions = pd.read_csv("ZILLOW_REGIONS.csv")
+    for row in df.iterrows():
+        print(row)
+        df["zip"] = regions.loc[(regions[1] == 'zip') & (regions[0] == row[1]), 'region']
+
+    df.to_csv("ZILLOW_ZSFH.csv", index = False)
 
 """
 This method sorts the data and returns it
@@ -42,9 +45,14 @@ def sortData():
 
 '''
 activate myenv to work with conda (for nick on visual studio)
+#Max file location: 
+C:/Users/Max/PycharmProjects/homeprices/map/tl_2019_us_zcta510.shx
+#Nick:
+C:/Users/nfade/Documents/GitHub/homeprices/map/tl_2019_us_zcta510.shx
+
 '''
 
-map_us = gpd.read_file('C:/Users/nfade/Documents/GitHub/homeprices/map/tl_2019_us_zcta510.shx')
+# map_us = gpd.read_file('C:/Users/Max/PycharmProjects/homeprices/map/tl_2019_us_zcta510.shx')
 
 '''
 ZCTA5CE10       object  2010 Census 5-digit ZIP Code Tabulation Area code
@@ -59,4 +67,10 @@ INTPTLON10      object  2010 Census longitude of the internal point
 geometry      geometry
 '''
 
-print(map_us.head())
+# merged_map_df = pd.merge(map_us, sortData(), on='state')
+# map_us.plot('GEOID10', figsize=(12,8), cmap=plt.cm.Greens)
+
+
+# print(map_us.head())
+
+pullDataSubset()
