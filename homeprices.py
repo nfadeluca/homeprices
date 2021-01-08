@@ -8,6 +8,7 @@ from shapely import wkt
 
 
 # Making use of Zillow data
+regions = pd.read_csv("ZILLOW_REGIONS.csv")
 """
 This method reads the Zillow data file and then outputs a csv file containing
 only the home price data for a certain month and type of home
@@ -21,14 +22,22 @@ def pullDataSubset():
     #index = False gets rid of the first column
     df.to_csv("ZILLOW_JAN.csv", index = False)
     df = df.copy()[df['indicator_id'] == 'ZSFH']
-
-    #Adds a new column of the corresponding zip code
-    regions = pd.read_csv("ZILLOW_REGIONS.csv")
-    for row in df.iterrows():
-        print(row)
-        df["zip"] = regions.loc[(regions[1] == 'zip') & (regions[0] == row[1]), 'region']
-
     df.to_csv("ZILLOW_ZSFH.csv", index = False)
+
+def addZipCode():
+    df = pd.read("ZILLOW_ZSFH.csv")
+    regions = pd.read_csv("ZILLOW_REGIONS.csv")
+    print("Trying it")
+
+"""
+This helper method
+@:param The zillow region ID
+@:returns The zip code for the region
+"""
+def pullZipCode(region):
+
+    zip = regions.loc[(regions['region_type'] == 'zip') & (regions['region_id'] == region), 'region']
+    return zip
 
 """
 This method sorts the data and returns it
