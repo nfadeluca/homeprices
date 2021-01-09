@@ -25,17 +25,18 @@ def pullDataSubset():
     df.to_csv("ZILLOW_ZSFH.csv", index = False)
 
 def addZipCode():
-    df = pd.read("ZILLOW_ZSFH.csv")
-    regions = pd.read_csv("ZILLOW_REGIONS.csv")
-    print("Trying it")
+    df = pd.read_csv("ZILLOW_TEST.csv")
+    codes = df['region_id'].apply(pullZipCode)
+    print("DONE")
+    print(codes)
 
 """
-This helper method
+This helper method takes a region ID and returns the corresponding zip code
 @:param The zillow region ID
 @:returns The zip code for the region
 """
 def pullZipCode(region):
-
+    zip = 0
     zip = regions.loc[(regions['region_type'] == 'zip') & (regions['region_id'] == region), 'region']
     return zip
 
@@ -44,11 +45,12 @@ This method sorts the data and returns it
 @:returns The sorted dataframe
 """
 def sortData():
-    df = pd.read_csv("ZILLOW_ZATT.csv")
+    df = pd.read_csv("ZILLOW_ZSFH.csv")
     df['value'] = pd.to_numeric(df['value'], errors='coerce')
     df = df.sort_values(by='value')
     return df
 
+#Show the histogram of data
 #sortData()['value'].plot(kind='hist', bins=100, grid=True, range=[0, 1000000])
 #plt.show()
 
@@ -82,4 +84,4 @@ geometry      geometry
 
 # print(map_us.head())
 
-pullDataSubset()
+addZipCode()
