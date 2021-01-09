@@ -24,21 +24,24 @@ def pullDataSubset():
     df = df.copy()[df['indicator_id'] == 'ZSFH']
     df.to_csv("ZILLOW_ZSFH.csv", index = False)
 
+def addOne(x):
+    return x + 1
+
 def addZipCode():
     df = pd.read_csv("ZILLOW_TEST.csv")
-    codes = df['region_id'].apply(pullZipCode)
+    df['zip_code'] = df['region_id'].apply(addOne)
     print("DONE")
-    print(codes)
+    print(df.head())
 
 """
 This helper method takes a region ID and returns the corresponding zip code
 @:param The zillow region ID
 @:returns The zip code for the region
 """
-def pullZipCode(region):
-    zip = 0
-    zip = regions.loc[(regions['region_type'] == 'zip') & (regions['region_id'] == region), 'region']
-    return zip
+def getZipCode(region):
+    zipCode = regions.loc[['region_type'] == 'zip', ['region_id'] == region]
+    # zipCode = regions.loc[(regions['region_type'] == 'zip') & (regions['region_id'] == region), 'region']
+    return zipCode
 
 """
 This method sorts the data and returns it
@@ -80,8 +83,7 @@ geometry      geometry
 
 # merged_map_df = pd.merge(map_us, sortData(), on='state')
 # map_us.plot('GEOID10', figsize=(12,8), cmap=plt.cm.Greens)
-
-
 # print(map_us.head())
 
-addZipCode()
+print(getZipCode(66260))
+# addZipCode()
