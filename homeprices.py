@@ -7,8 +7,6 @@ import geopandas as gpd
 from shapely import wkt
 
 
-# Making use of Zillow data
-regions = pd.read_csv("ZILLOW_REGIONS.csv")
 """
 This method reads the Zillow data file and then outputs a csv file containing
 only the home price data for a certain month and type of home
@@ -24,23 +22,32 @@ def pullDataSubset():
     df = df.copy()[df['indicator_id'] == 'ZSFH']
     df.to_csv("ZILLOW_ZSFH.csv", index = False)
 
+
+
+
 def addOne(x):
     return x + 1
 
-def addZipCode():
-    df = pd.read_csv("ZILLOW_TEST.csv")
-    df['zip_code'] = df['region_id'].apply(addOne)
-    print("DONE")
-    print(df.head())
+def addZipCodes():
+    df = pd.read_csv("ZILLOW_ZSFH.csv")
+    df['zip_code'] = df['region_id'].apply(getZipCode)
+    df.to_csv("ZILLOW_ZSFH.csv", index = False)
+
 
 """
-This helper method takes a region ID and returns the corresponding zip code
+This helper method takes a region ID and returns the corresponding zip code.
+Sets the default zip code to 0, and only searches for the zip code in the regions lookup
 @:param The zillow region ID
 @:returns The zip code for the region
 """
+
 def getZipCode(region):
-    zipCode = regions.loc[['region_type'] == 'zip', ['region_id'] == region]
-    # zipCode = regions.loc[(regions['region_type'] == 'zip') & (regions['region_id'] == region), 'region']
+    regions = pd.read_csv("ZILLOW_REGIONS.csv")
+    zipCode = 0
+    #Check to see if the region exists in the dataframe before finding its zip code
+    if region in regions.values:
+        zipCode = regions.loc[(regions['region_type'] == 'zip') & (regions['region_id'] == region), 'region']
+        print(zipCode)
     return zipCode
 
 """
@@ -51,7 +58,7 @@ def sortData():
     df = pd.read_csv("ZILLOW_ZSFH.csv")
     df['value'] = pd.to_numeric(df['value'], errors='coerce')
     df = df.sort_values(by='value')
-    return df
+    return df.astype(int)
 
 #Show the histogram of data
 #sortData()['value'].plot(kind='hist', bins=100, grid=True, range=[0, 1000000])
@@ -85,5 +92,5 @@ geometry      geometry
 # map_us.plot('GEOID10', figsize=(12,8), cmap=plt.cm.Greens)
 # print(map_us.head())
 
-print(getZipCode(66260))
-# addZipCode()
+addZipCodes()
+# print(getZipCode(96817))
