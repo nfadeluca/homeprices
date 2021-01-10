@@ -32,7 +32,7 @@ def addZipCodes():
     df = pd.read_csv("ZILLOW_TEST.csv")
     df['zip_code'] = df['region_id'].apply(getZipCode)
     print("Done!")
-    df.to_csv("ZILLOW_TEST.csv", index = False)
+    # df.to_csv("ZILLOW_TEST.csv", index = False)
 
 
 """
