@@ -22,7 +22,7 @@ def pullDataSubset():
     df = df.copy()[df['indicator_id'] == 'ZSFH']
     df.to_csv("ZILLOW_ZSFH.csv", index = False)
 
-def removeNonZip():
+def cleanRegionsMethod():
     final = []
     with open('ZILLOW_REGIONS.csv') as f:
         lines = f.readlines()
@@ -46,7 +46,7 @@ def removeNonZip():
             j.write('\n')
            
 
-removeNonZip()
+cleanRegionsMethod()
 
 def addOne(x):
     return x + 1
@@ -55,7 +55,7 @@ def addZipCodes():
     df = pd.read_csv("ZILLOW_TEST.csv")
     df['zip_code'] = df['region_id'].apply(getZipCode)
     print("Done!")
-    # df.to_csv("ZILLOW_TEST.csv", index = False)
+    df.to_csv("ZILLOW_TEST.csv", index = False)
 
 
 """
@@ -65,14 +65,8 @@ Sets the default zip code to 0, and only searches for the zip code in the region
 @:returns The zip code for the region
 """
 
-def getZipCode(region):
-    regions = pd.read_csv("ZILLOW_REGIONS.csv")
-    zipCode = 0
-    #Check to see if the region exists in the dataframe before finding its zip code
-    if region in regions.values:
-        zipCode = regions.loc[(regions['region_type'] == 'zip') & (regions['region_id'] == region), 'region']
-        print(zipCode)
-    return zipCode
+def getZipCode(region_id):
+    return 0
 
 """
 This method sorts the data and returns it
