@@ -44,40 +44,39 @@ def cleanRegionsMethod():
             item = item.strip('\n')
             j.write(str(item))
             j.write('\n')
-           
-
-cleanRegionsMethod()
-
-def addOne(x):
-    return x + 1
 
 def addZipCodes():
     df = pd.read_csv("ZILLOW_TEST.csv")
     df['zip_code'] = df['region_id'].apply(getZipCode)
     print("Done!")
     df.to_csv("ZILLOW_TEST.csv", index = False)
-
-
 """
 This helper method takes a region ID and returns the corresponding zip code.
 Sets the default zip code to 0, and only searches for the zip code in the regions lookup
 @:param The zillow region ID
 @:returns The zip code for the region
 """
-
 def getZipCode(region_id):
-    return 0
+    regions = pd.read_csv("ZILLOW_REGIONS.csv")
+    #Account for regions that don't have a zip code
 
+    mask = regions['region_id'] == region_id
+    if len(mask)<=0:
+        print("Empty!")
+        return "None"
+    return mask
+
+addZipCodes()
 """
 This method sorts the data and returns it
 @:returns The sorted dataframe
 """
 def sortData():
-    df = pd.read_csv("ZILLOW_ZSFH.csv")
-    df['value'] = pd.to_numeric(df['value'], errors='coerce')
-    df = df.sort_values(by='value')
+    df = pd.read_csv("ZILLOW_REGIONS.csv")
+    df['region_id'] = pd.to_numeric(df['region_id'], errors='coerce')
+    df = df.sort_values(by='region_id')
+    df.to_csv("ZILLOW_REGIONS.csv", index = False)
     return df.astype(int)
-
 #Show the histogram of data
 #sortData()['value'].plot(kind='hist', bins=100, grid=True, range=[0, 1000000])
 #plt.show()
