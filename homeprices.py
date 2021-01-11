@@ -58,13 +58,13 @@ Sets the default zip code to 0, and only searches for the zip code in the region
 """
 def getZipCode(region_id):
     regions = pd.read_csv("ZILLOW_REGIONS.csv")
-    #Account for regions that don't have a zip code
-
-    mask = regions['region_id'] == region_id
-    if len(mask)<=0:
-        print("Empty!")
-        return "None"
-    return mask
+    print(region_id)
+    zipCode = "None"
+    if region_id in regions['region_id'].unique():
+        print("FOUND!!!")
+        zipCode = regions.at[[regions['region_id'] == region_id].index.values, 'region']
+        print(zipCode)
+    return zipCode
 
 addZipCodes()
 """
