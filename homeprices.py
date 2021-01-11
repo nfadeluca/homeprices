@@ -22,8 +22,31 @@ def pullDataSubset():
     df = df.copy()[df['indicator_id'] == 'ZSFH']
     df.to_csv("ZILLOW_ZSFH.csv", index = False)
 
+def removeNonZip():
+    final = []
+    with open('ZILLOW_REGIONS.csv') as f:
+        lines = f.readlines()
+        with open('ZILLOW_REGIONS.csv', 'w') as g:
+            for line in lines:
+                if 'zip' in line:
+                    g.write(line)
+    with open('ZILLOW_REGIONS.csv') as h:
+        lines = h.readlines()
+        for line in lines:
+            line = line.split(',')
+            for item in line:
+                if item == 'zip': line.remove('zip')
+            line = ','.join(line)
+            line = line.split(';')
+            final.append(line[0])
+    with open('ZILLOW_REGIONS.csv', 'w') as j:
+        for item in final:
+            item = item.strip('\n')
+            j.write(str(item))
+            j.write('\n')
+           
 
-
+removeNonZip()
 
 def addOne(x):
     return x + 1
@@ -93,5 +116,5 @@ geometry      geometry
 # map_us.plot('GEOID10', figsize=(12,8), cmap=plt.cm.Greens)
 # print(map_us.head())
 
-addZipCodes()
+#addZipCodes()
 # print(getZipCode(96817))
