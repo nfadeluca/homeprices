@@ -49,7 +49,7 @@ def addZipCodes():
     df = pd.read_csv("ZILLOW_TEST.csv")
     df['zip_code'] = df['region_id'].apply(getZipCode)
     print("Done!")
-    df.to_csv("ZILLOW_TEST.csv", index = False)
+    # df.to_csv("ZILLOW_TEST.csv", index = False)
 """
 This helper method takes a region ID and returns the corresponding zip code.
 Sets the default zip code to 0, and only searches for the zip code in the regions lookup
@@ -58,13 +58,13 @@ Sets the default zip code to 0, and only searches for the zip code in the region
 """
 def getZipCode(region_id):
     regions = pd.read_csv("ZILLOW_REGIONS.csv")
-    print(region_id)
+    # print(region_id)
     zipCode = "None"
     if region_id in regions['region_id'].unique():
         print("Found the region")
-        zipCode = regions.at[[regions['region_id'] == region_id].index.values, 'region']
-        print(zipCode)
-    return zipCode
+        zipCode = regions.loc[regions.region_id == region_id]
+        print(zipCode.iloc[0]['region'])
+    return zipCode.iloc[0]['region']
 
 addZipCodes()
 """
