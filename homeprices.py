@@ -61,7 +61,7 @@ def getZipCode(region_id):
     print(region_id)
     zipCode = "None"
     if region_id in regions['region_id'].unique():
-        print("FOUND!!!")
+        print("Found the region")
         zipCode = regions.at[[regions['region_id'] == region_id].index.values, 'region']
         print(zipCode)
     return zipCode
