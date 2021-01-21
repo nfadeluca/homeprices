@@ -73,7 +73,7 @@ has been added along with all of its zip codes. It filters the file by removing 
 "None" values inside of the zipcodes column.
 @:returns New CSV file with zipcodes only (ZILLOW_TEST_Filtered)
 """
-def filterZipCodes():
+def filterZillowTest():
     with open('ZILLOW_TEST.csv', 'r') as file:
         rows = file.readlines()
         with open('ZILLOW_TEST_Filtered', 'w') as newfile:
