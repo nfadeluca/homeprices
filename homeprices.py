@@ -45,11 +45,6 @@ def cleanRegionsMethod():
             j.write(str(item))
             j.write('\n')
 
-def addZipCodes():
-    df = pd.read_csv("ZILLOW_TEST.csv")
-    df['zip_code'] = df['region_id'].apply(getZipCode)
-    print("Done!")
-    df.to_csv("ZILLOW_TEST.csv", index = False)
 """
 This helper method takes a region ID and returns the corresponding zip code.
 Sets the default zip code to 0, and only searches for the zip code in the regions lookup
@@ -66,7 +61,26 @@ def getZipCode(region_id):
         print(zipCode)
     return zipCode
 
-addZipCodes()
+def addZipCodes():
+    df = pd.read_csv("ZILLOW_TEST.csv")
+    df['zip_code'] = df['region_id'].apply(getZipCode)
+    print("Done!")
+    df.to_csv("ZILLOW_TEST.csv", index = False)
+
+"""
+This method reads and writes from the TEST File (originally ZSFH) after the zipcode column
+has been added along with all of its zip codes. It filters the file by removing all of the
+"None" values inside of the zipcodes column.
+@:returns New CSV file with zipcodes only (ZILLOW_TEST_Filtered)
+"""
+def filterZipCodes():
+    with open('ZILLOW_TEST.csv', 'r') as file:
+        rows = file.readlines()
+        with open('ZILLOW_TEST_Filtered', 'w') as newfile:
+            for row in rows:
+                if 'None' not in row:
+                    newfile.write(row)
+
 """
 This method sorts the data and returns it
 @:returns The sorted dataframe
