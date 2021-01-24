@@ -70,6 +70,20 @@ def getZipCode(region_id):
     return zipCode
 
 """
+This method reads and writes from the TEST File (originally ZSFH) after the zipcode column
+has been added along with all of its zip codes. It filters the file by removing all of the
+"None" values inside of the zipcodes column.
+@:returns New CSV file with zipcodes only (ZILLOW_TEST_Filtered)
+"""
+def filterZillowTest():
+    with open('ZILLOW_TEST.csv', 'r') as file:
+        rows = file.readlines()
+        with open('ZILLOW_TEST_Filtered', 'w') as newfile:
+            for row in rows:
+                if 'None' not in row:
+                    newfile.write(row)
+
+"""
 This method sorts the file by region_id and returns it
 @:returns The sorted dataframe
 """
