@@ -111,7 +111,7 @@ C:/Users/Max/PycharmProjects/homeprices/map/tl_2019_us_zcta510.shx
 #Nick:
 C:/Users/nfade/Documents/GitHub/homeprices/map/tl_2019_us_zcta510.shx
 '''
-# map_us = gpd.read_file('C:/Users/Max/PycharmProjects/homeprices/map/tl_2019_us_zcta510.shx')
+map_us = gpd.read_file('C:/Users/Max/PycharmProjects/homeprices/map/tl_2019_us_zcta510.shx')
 
 '''
 ZCTA5CE10       object  2010 Census 5-digit ZIP Code Tabulation Area code
@@ -126,9 +126,9 @@ INTPTLON10      object  2010 Census longitude of the internal point
 geometry      geometry
 '''
 
-# merged_map_df = pd.merge(map_us, sortByRegionId("ZILLOW_REGIONS.csv"), on='state')
-# map_us.plot('GEOID10', figsize=(12,8), cmap=plt.cm.Greens)
-# print(map_us.head())
+merged_map_df = pd.merge(map_us, sortByRegionId("ZILLOW_REGIONS.csv"), on='state')
+map_us.plot('GEOID10', figsize=(12,8), cmap=plt.cm.Greens)
+print(map_us.head())
 
 
 
