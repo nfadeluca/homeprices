@@ -45,11 +45,16 @@ def cleanRegionsMethod():
             j.write(str(item))
             j.write('\n')
 
-def addZipCodes():
-    df = pd.read_csv("ZILLOW_TEST.csv")
+"""
+This method will add a new column to the dataset containing the zip codes
+"""
+def addZipCodes(fileName):
+    df = pd.read_csv(fileName)
+    global regions
+    regions = pd.read_csv("ZILLOW_REGIONS.csv")
     df['zip_code'] = df['region_id'].apply(getZipCode)
-    print("Done!")
-    df.to_csv("ZILLOW_TEST.csv", index = False)
+    print("Outputting CSV file.")
+    df.to_csv(fileName, index = False)
 """
 This helper method takes a region ID and returns the corresponding zip code.
 Sets the default zip code to 0, and only searches for the zip code in the regions lookup
@@ -57,29 +62,33 @@ Sets the default zip code to 0, and only searches for the zip code in the region
 @:returns The zip code for the region
 """
 def getZipCode(region_id):
-    regions = pd.read_csv("ZILLOW_REGIONS.csv")
     zipCode = "None"
     if region_id in regions['region_id'].unique():
-        print("Found the region")
         zipCode = regions.loc[regions.region_id == region_id]
         zipCode = zipCode.iloc[0]['region']
-        print(zipCode)
+        print("Zip code found: " + str(zipCode))
     return zipCode
 
-addZipCodes()
 """
-This method sorts the data and returns it
+This method sorts the file by region_id and returns it
 @:returns The sorted dataframe
 """
-def sortData():
-    df = pd.read_csv("ZILLOW_REGIONS.csv")
+def sortByRegionId(fileName):
+    df = pd.read_csv(fileName)
     df['region_id'] = pd.to_numeric(df['region_id'], errors='coerce')
     df = df.sort_values(by='region_id')
-    df.to_csv("ZILLOW_REGIONS.csv", index = False)
+    df.to_csv(fileName, index = False)
     return df.astype(int)
-#Show the histogram of data
-#sortData()['value'].plot(kind='hist', bins=100, grid=True, range=[0, 1000000])
-#plt.show()
+
+"""
+This method sorts the file by region_id and returns it
+@:returns The sorted dataframe
+"""
+def sortHistogram(fileName):
+    df = pd.read_csv(fileName)
+    df['value'] = pd.to_numeric(df['value'], errors='coerce')
+    df = df.sort_values(by='value')
+    return df
 
 '''
 activate myenv to work with conda (for nick on visual studio)
@@ -87,9 +96,7 @@ activate myenv to work with conda (for nick on visual studio)
 C:/Users/Max/PycharmProjects/homeprices/map/tl_2019_us_zcta510.shx
 #Nick:
 C:/Users/nfade/Documents/GitHub/homeprices/map/tl_2019_us_zcta510.shx
-
 '''
-
 # map_us = gpd.read_file('C:/Users/Max/PycharmProjects/homeprices/map/tl_2019_us_zcta510.shx')
 
 '''
@@ -105,9 +112,16 @@ INTPTLON10      object  2010 Census longitude of the internal point
 geometry      geometry
 '''
 
-# merged_map_df = pd.merge(map_us, sortData(), on='state')
+# merged_map_df = pd.merge(map_us, sortByRegionId("ZILLOW_REGIONS.csv"), on='state')
 # map_us.plot('GEOID10', figsize=(12,8), cmap=plt.cm.Greens)
 # print(map_us.head())
 
-#addZipCodes()
+
+
+#Show the histogram of data
+sortHistogram("ZILLOW_ZSFH.csv")['value'].plot(kind='hist', bins=100, grid=True, range=[0, 1000000])
+plt.show()
+
+addZipCodes("ZILLOW_ZSFH.csv")
 # print(getZipCode(96817))
+
