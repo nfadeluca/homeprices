@@ -136,7 +136,7 @@ geometry      geometry
 # sortHistogram("ZILLOW_ZSFH.csv")['value'].plot(kind='hist', bins=100, grid=True, range=[0, 1000000])
 # plt.show()
 
-filterZipCodes("ZILLOW_ZSFH.csv")
+# filterZipCodes("ZILLOW_ZSFH.csv")
 
 # print(getZipCode(96817))
 
