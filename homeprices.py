@@ -75,10 +75,10 @@ has been added along with all of its zip codes. It filters the file by removing 
 "None" values inside of the zipcodes column.
 @:returns New CSV file with zipcodes only (ZILLOW_TEST_Filtered)
 """
-def filterZillowTest():
-    with open('ZILLOW_TEST.csv', 'r') as file:
+def filterZipCodes(fileName):
+    with open(fileName, 'r') as file:
         rows = file.readlines()
-        with open('ZILLOW_TEST_Filtered', 'w') as newfile:
+        with open('ZILLOW_ZSFH_Filtered.csv', 'w') as newfile:
             for row in rows:
                 if 'None' not in row:
                     newfile.write(row)
@@ -133,9 +133,10 @@ geometry      geometry
 
 
 #Show the histogram of data
-sortHistogram("ZILLOW_ZSFH.csv")['value'].plot(kind='hist', bins=100, grid=True, range=[0, 1000000])
-plt.show()
+# sortHistogram("ZILLOW_ZSFH.csv")['value'].plot(kind='hist', bins=100, grid=True, range=[0, 1000000])
+# plt.show()
 
-addZipCodes("ZILLOW_ZSFH.csv")
+filterZipCodes("ZILLOW_ZSFH.csv")
+
 # print(getZipCode(96817))
 
