@@ -111,7 +111,7 @@ C:/Users/Max/PycharmProjects/homeprices/map/tl_2019_us_zcta510.shx
 #Nick:
 C:/Users/nfade/Documents/GitHub/homeprices/map/tl_2019_us_zcta510.shx
 '''
-map_us = gpd.read_file('/shapefile/tl_2019_us_zcta510.shx')
+map_us = gpd.read_file('.map/tl_2019_us_zcta510.shx')
 
 '''
 ZCTA5CE10       object  2010 Census 5-digit ZIP Code Tabulation Area code
