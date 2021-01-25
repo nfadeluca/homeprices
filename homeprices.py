@@ -126,9 +126,8 @@ INTPTLON10      object  2010 Census longitude of the internal point
 geometry      geometry
 '''
 
-merged_map_df = pd.merge(map_us, sortByRegionId("ZILLOW_REGIONS.csv"), on='state')
-map_us.plot('GEOID10', figsize=(12,8), cmap=plt.cm.Greens)
-print(map_us.head())
+merged_map_df = pd.merge(map_us, pd.read_csv("ZILLOW_ZSFH_Filtered.csv"), on='GEOID10')
+# map_us.plot('GEOID10', figsize=(12,8), cmap=plt.cm.Greens)
 
 
 
