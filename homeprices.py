@@ -95,7 +95,8 @@ def visualizeMap():
     # Getting Geometry
     map_us = gpd.read_file('./map/tl_2019_us_zcta510.shx')
     map_us = map_us[['ZCTA5CE10','geometry']]
-    
+    map_us.rename(columns = {'ZCTA5CE10' : 'zip_code'}, inplace = True)
+    print(map_us.head())
 
 
 visualizeMap()
