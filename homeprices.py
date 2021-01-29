@@ -84,6 +84,17 @@ def filterZipCodes(fileName):
                     newfile.write(row)
 
 """
+This method reads housing values from Zillow and matches them to their zipcodes and then
+plots each value for each zipcode.
+@returns Plotted map with zipcodes and their values
+"""
+def visualizeMap():
+    
+
+
+visualizeMap()
+
+"""
 This method sorts the file by region_id and returns it
 @:returns The sorted dataframe
 """
@@ -126,18 +137,10 @@ INTPTLON10      object  2010 Census longitude of the internal point
 geometry      geometry
 '''
 
-#merged_map_df = pd.merge(map_us, pd.read_csv("ZILLOW_ZSFH_Filtered.csv"), on='GEOID10')
-
-#map_us.plot('ZCTA5CE10', figsize=(12,8))
-zipcodes_df = pd.read_csv("ZILLOW_ZSFH_Filtered.csv")
-merged_df = map_us.merge(zipcodes_df, on='zip_code')
-
-
 #Show the histogram of data
 # sortHistogram("ZILLOW_ZSFH.csv")['value'].plot(kind='hist', bins=100, grid=True, range=[0, 1000000])
 # plt.show()
 
 # filterZipCodes("ZILLOW_ZSFH.csv")
-
 # print(getZipCode(96817))
 
