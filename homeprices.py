@@ -99,6 +99,9 @@ def visualizeMap():
     map_us['zip_code'] = map_us['zip_code'].astype(int)
     # Merging
     map_us = map_us.merge(home_data, on = 'zip_code')
+    # Plotting
+    map_us.plot(column = 'value', legend = True)
+    plt.show()
 
 
 visualizeMap()
