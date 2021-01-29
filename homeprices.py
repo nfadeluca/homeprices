@@ -89,7 +89,9 @@ plots each value for each zipcode.
 @returns Plotted map with zipcodes and their values
 """
 def visualizeMap():
-    
+    home_data = pd.read_csv("./ZILLOW_ZSFH_Filtered.csv")
+    home_data = home_data[['zip_code','value']]
+    print(home_data)
 
 
 visualizeMap()
