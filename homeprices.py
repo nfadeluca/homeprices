@@ -89,9 +89,13 @@ plots each value for each zipcode.
 @returns Plotted map with zipcodes and their values
 """
 def visualizeMap():
+    # Getting Home Data
     home_data = pd.read_csv("./ZILLOW_ZSFH_Filtered.csv")
     home_data = home_data[['zip_code','value']]
-    print(home_data)
+    # Getting Geometry
+    map_us = gpd.read_file('./map/tl_2019_us_zcta510.shx')
+    map_us = map_us[['ZCTA5CE10','geometry']]
+    
 
 
 visualizeMap()
@@ -124,7 +128,6 @@ C:/Users/Max/PycharmProjects/homeprices/map/tl_2019_us_zcta510.shx
 #Nick:
 C:/Users/nfade/Documents/GitHub/homeprices/map/tl_2019_us_zcta510.shx
 '''
-map_us = gpd.read_file('./map/tl_2019_us_zcta510.shx')
 
 '''
 ZCTA5CE10       object  2010 Census 5-digit ZIP Code Tabulation Area code
