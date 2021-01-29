@@ -127,8 +127,10 @@ geometry      geometry
 '''
 
 #merged_map_df = pd.merge(map_us, pd.read_csv("ZILLOW_ZSFH_Filtered.csv"), on='GEOID10')
-map_us.plot('ZCTA5CE10', figsize=(12,8))
-plt.show()
+
+#map_us.plot('ZCTA5CE10', figsize=(12,8))
+zipcodes_df = pd.read_csv("ZILLOW_ZSFH_Filtered.csv")
+merged_df = map_us.merge(zipcodes_df, on='zip_code')
 
 
 #Show the histogram of data
