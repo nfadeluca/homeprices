@@ -100,7 +100,9 @@ def visualizeMap():
     # Merging
     map_us = map_us.merge(home_data, on = 'zip_code')
     # Plotting
-    map_us.plot(column = 'value', legend = True)
+    maxVal = 3_000_000
+    map_us.loc[map_us['value'] >= maxVal, 'value'] = maxVal
+    map_us.plot(column = 'value',cmap = 'Spectral' ,legend = True)
     plt.show()
 
 
