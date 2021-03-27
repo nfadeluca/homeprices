@@ -7,12 +7,13 @@ import geopandas as gpd
 from shapely import wkt
 
 
-"""
-This method reads the Zillow data file and then outputs a csv file containing
-only the home price data for a certain month and type of home
-@:returns Returns the unsorted but filtered dataframe
-"""
+
 def pullDataSubset():
+    """
+    @:returns Returns the unsorted but filtered dataframe
+    This function reads the Zillow data file and then outputs a csv file containing
+    only the home price data for a certain month and type of home
+    """
     print("Opening up")
     df = pd.read_csv("ZILLOW_DATA.csv")
     #The date here is the date that will be outputted
@@ -23,6 +24,10 @@ def pullDataSubset():
     df.to_csv("ZILLOW_ZSFH.csv", index = False)
 
 def cleanRegionsMethod():
+    """
+    @:returns
+    //TODO Nicola please comment this function
+    """
     final = []
     with open('ZILLOW_REGIONS.csv') as f:
         lines = f.readlines()
@@ -45,23 +50,27 @@ def cleanRegionsMethod():
             j.write(str(item))
             j.write('\n')
 
-"""
-This method will add a new column to the dataset containing the zip codes
-"""
+
 def addZipCodes(fileName):
+    """
+    @:param filename: The name of the file to populate with zip codes
+    @:returns filename: A modified file containing a new zip codes column
+    This function will add a new column to the dataset containing the zip codes
+    """
     df = pd.read_csv(fileName)
     global regions
     regions = pd.read_csv("ZILLOW_REGIONS.csv")
     df['zip_code'] = df['region_id'].apply(getZipCode)
     print("Outputting CSV file.")
     df.to_csv(fileName, index = False)
-"""
-This helper method takes a region ID and returns the corresponding zip code.
-Sets the default zip code to 0, and only searches for the zip code in the regions lookup
-@:param The zillow region ID
-@:returns The zip code for the region
-"""
+
 def getZipCode(region_id):
+    """
+    @:param The zillow region ID
+    @:returns The zip code for the region
+    This helper method takes a region ID and returns the corresponding zip code.
+    Sets the default zip code to 0, and only searches for the zip code in the regions lookup
+    """
     zipCode = "None"
     if region_id in regions['region_id'].unique():
         zipCode = regions.loc[regions.region_id == region_id]
@@ -69,13 +78,15 @@ def getZipCode(region_id):
         print("Zip code found: " + str(zipCode))
     return zipCode
 
-"""
-This method reads and writes from the TEST File (originally ZSFH) after the zipcode column
-has been added along with all of its zip codes. It filters the file by removing all of the
-"None" values inside of the zipcodes column.
-@:returns New CSV file with zipcodes only (ZILLOW_TEST_Filtered)
-"""
+
 def filterZipCodes(fileName):
+    """
+    @:param fileName: The file to be processed
+    @:returns New CSV file with zipcodes only (ZILLOW_TEST_Filtered)
+    This function reads and writes from the TEST File (originally ZSFH) after the zipcode column
+    has been added along with all of its zip codes. It filters the file by removing all of the
+    "None" values inside of the zipcodes column.
+    """
     with open(fileName, 'r') as file:
         rows = file.readlines()
         with open('ZILLOW_ZSFH_Filtered.csv', 'w') as newfile:
@@ -83,12 +94,13 @@ def filterZipCodes(fileName):
                 if 'None' not in row:
                     newfile.write(row)
 
-"""
-This method reads housing values from Zillow and matches them to their zipcodes and then
-plots each value for each zipcode.
-@returns Plotted map with zipcodes and their values
-"""
+
 def visualizeMap():
+    """
+    @:returns A plotted heatmap with zipcodes and their values as a heatmap
+    This function reads housing values from Zillow and matches them to their zipcodes and then
+    plots each value for each zipcode on a visual 2D heatmap of the United States.
+    """
     # Getting Home Data
     home_data = pd.read_csv("./ZILLOW_ZSFH_Filtered.csv")
     home_data = home_data[['zip_code','value']]
@@ -108,22 +120,26 @@ def visualizeMap():
 
 visualizeMap()
 
-"""
-This method sorts the file by region_id and returns it
-@:returns The sorted dataframe
-"""
+
 def sortByRegionId(fileName):
+    """
+    @:param fileName: The file to process and sort
+    @:returns The sorted dataframe
+    This method sorts the file by region_id and returns it
+    """
     df = pd.read_csv(fileName)
     df['region_id'] = pd.to_numeric(df['region_id'], errors='coerce')
     df = df.sort_values(by='region_id')
     df.to_csv(fileName, index = False)
     return df.astype(int)
 
-"""
-This method sorts the file by region_id and returns it
-@:returns The sorted dataframe
-"""
+
 def sortHistogram(fileName):
+    """
+    @:param fileName: The file to sort
+    @:returns The sorted dataframe
+    This method sorts the file by region_id and returns it
+    """
     df = pd.read_csv(fileName)
     df['value'] = pd.to_numeric(df['value'], errors='coerce')
     df = df.sort_values(by='value')
