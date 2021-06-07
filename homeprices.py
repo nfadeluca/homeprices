@@ -51,12 +51,12 @@ def cleanRegionsMethod():
     # Opens ZILLOW_REGIONS and write only lines with zipcodes
     with open('ZILLOW_REGIONS.csv') as f:
         lines = f.readlines()
-        with open('ZILLOW_REGIONS.csv', 'w') as g:
+        with open('ZILLOW_REGIONS_NEW.csv', 'w') as g:
             for line in lines:
                 if 'zip' in line:
                     g.write(line)
     # Removing commas and joining newly written lines
-    with open('ZILLOW_REGIONS.csv') as h:
+    with open('ZILLOW_REGIONS_NEW.csv') as h:
         lines = h.readlines()
         for line in lines:
             line = line.split(',')
@@ -66,13 +66,13 @@ def cleanRegionsMethod():
             line = line.split(';')
             final.append(line[0])
     # Writing zip codes
-    with open('ZILLOW_REGIONS.csv', 'w') as j:
+    with open('ZILLOW_REGIONS_NEW.csv', 'w') as j:
         j.write("region,region_id\n")
         for item in final:
             item = item.strip('\n')
             j.write(str(item))
             j.write('\n')
-
+cleanRegionsMethod()
 
 def addZipCodes(fileName):
     """
