@@ -25,16 +25,18 @@ def pullDataSubset():
 
 def cleanRegionsMethod():
     """
-    @:returns
-    //TODO Nicola please comment this function
+    Removes all lines from ZILLOW_REGIONS and keeps only
+    the region and region id columns.
     """
     final = []
+    # Opens ZILLOW_REGIONS and write only lines with zipcodes
     with open('ZILLOW_REGIONS.csv') as f:
         lines = f.readlines()
         with open('ZILLOW_REGIONS.csv', 'w') as g:
             for line in lines:
                 if 'zip' in line:
                     g.write(line)
+    # Removing commas and joining newly written lines
     with open('ZILLOW_REGIONS.csv') as h:
         lines = h.readlines()
         for line in lines:
@@ -44,6 +46,7 @@ def cleanRegionsMethod():
             line = ','.join(line)
             line = line.split(';')
             final.append(line[0])
+    # Writing zip codes
     with open('ZILLOW_REGIONS.csv', 'w') as j:
         for item in final:
             item = item.strip('\n')
@@ -145,31 +148,9 @@ def sortHistogram(fileName):
     df = df.sort_values(by='value')
     return df
 
-'''
-activate myenv to work with conda (for nick on visual studio)
-#Max file location: 
-C:/Users/Max/PycharmProjects/homeprices/map/tl_2019_us_zcta510.shx
-#Nick:
-C:/Users/nfade/Documents/GitHub/homeprices/map/tl_2019_us_zcta510.shx
-'''
-
-'''
-ZCTA5CE10       object  2010 Census 5-digit ZIP Code Tabulation Area code
-GEOID10         object  2010 Census 5-digit ZIP Code Tabulation Area code
-CLASSFP10       object  2010 Census FIPS 55 class code
-MTFCC10         object  MAF/TIGER feature class code (G6350)
-FUNCSTAT10      object  2010 Census functional status
-ALAND10          int64  2010 Census land area
-AWATER10         int64  2010 Census water area
-INTPTLAT10      object  2010 Census latitude of the internal point
-INTPTLON10      object  2010 Census longitude of the internal point
-geometry      geometry
-'''
-
 #Show the histogram of data
 # sortHistogram("ZILLOW_ZSFH.csv")['value'].plot(kind='hist', bins=100, grid=True, range=[0, 1000000])
 # plt.show()
 
 # filterZipCodes("ZILLOW_ZSFH.csv")
 # print(getZipCode(96817))
-
