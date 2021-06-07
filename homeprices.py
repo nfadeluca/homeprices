@@ -7,6 +7,15 @@ import geopandas as gpd
 from shapely import wkt
 
 
+'''
+NOTE:
+activate myenv to work with conda (for nick on visual studio)
+#Max file location: 
+C:/Users/Max/PycharmProjects/homeprices/map/tl_2019_us_zcta510.shx
+#Nick:
+C:/Users/nfade/Documents/GitHub/homeprices/map/tl_2019_us_zcta510.shx
+'''
+
 
 def pullDataSubset():
     """
