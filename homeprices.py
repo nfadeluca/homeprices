@@ -25,8 +25,8 @@ def pullDataSubset():
 
 def cleanRegionsMethod():
     """
-    Removes all lines from ZILLOW_REGIONS and keeps only
-    the region and region id columns.
+    Creates new ZILLOW_REGIONS csv file that overwrites the old one,
+    keeping only region and region_id columns.
     """
     final = []
     # Opens ZILLOW_REGIONS and write only lines with zipcodes
