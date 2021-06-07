@@ -72,7 +72,7 @@ def cleanRegionsMethod():
             item = item.strip('\n')
             j.write(str(item))
             j.write('\n')
-cleanRegionsMethod()
+
 
 def addZipCodes(fileName):
     """
