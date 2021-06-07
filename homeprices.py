@@ -26,6 +26,15 @@ C:/Users/nfade/Documents/GitHub/homeprices/map/tl_2019_us_zcta510.shx
 4. 
 
 """
+def createSnapshot(date):
+    """
+    :param date: The month you wish to pull in format '2020-01-21'
+    :return: A CSV file named date.csv
+    This is the master function that uses the other helper methods to create a Zillow subset with the
+    data for a specific month
+    """
+
+
 
 def pullDataSubset():
     """
