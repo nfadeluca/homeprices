@@ -38,7 +38,7 @@ def createSnapshot(date):
     #The date here is the date that will be outputted
     df = df.copy()[df['date'] == date]
     #index = False gets rid of the first column
-    df.to_csv("ZILLOW_JAN.csv", index = False)
+    df.to_csv("ZILLOW_"+date+".csv", index = False)
     df = df.copy()[df['indicator_id'] == 'ZSFH']
     df.to_csv("ZILLOW_ZSFH.csv", index = False)
 
