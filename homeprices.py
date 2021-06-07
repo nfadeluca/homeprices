@@ -2,9 +2,7 @@
 import quandl
 import matplotlib.pyplot as plt
 import pandas as pd
-import numpy
-import geopandas as gpd
-from shapely import wkt
+#import geopandas as gpd
 
 
 '''
@@ -106,33 +104,6 @@ def filterZipCodes(fileName):
                 if 'None' not in row:
                     newfile.write(row)
 
-
-def visualizeMap():
-    """
-    @:returns A plotted heatmap with zipcodes and their values as a heatmap
-    This function reads housing values from Zillow and matches them to their zipcodes and then
-    plots each value for each zipcode on a visual 2D heatmap of the United States.
-    """
-    # Getting Home Data
-    home_data = pd.read_csv("./ZILLOW_ZSFH_Filtered.csv")
-    home_data = home_data[['zip_code','value']]
-    # Getting Geometry
-    map_us = gpd.read_file('./map/tl_2019_us_zcta510.shx')
-    map_us = map_us[['ZCTA5CE10','geometry']]
-    map_us.rename(columns = {'ZCTA5CE10' : 'zip_code'}, inplace = True)
-    map_us['zip_code'] = map_us['zip_code'].astype(int)
-    # Merging
-    map_us = map_us.merge(home_data, on = 'zip_code')
-    # Plotting
-    maxVal = 3_000_000
-    map_us.loc[map_us['value'] >= maxVal, 'value'] = maxVal
-    map_us.plot(column = 'value',cmap = 'Spectral' ,legend = True)
-    plt.show()
-
-
-visualizeMap()
-
-
 def sortByRegionId(fileName):
     """
     @:param fileName: The file to process and sort
@@ -156,6 +127,31 @@ def sortHistogram(fileName):
     df['value'] = pd.to_numeric(df['value'], errors='coerce')
     df = df.sort_values(by='value')
     return df
+
+# def visualizeMap():
+#     """
+#     @:returns A plotted heatmap with zipcodes and their values as a heatmap
+#     This function reads housing values from Zillow and matches them to their zipcodes and then
+#     plots each value for each zipcode on a visual 2D heatmap of the United States.
+#     """
+#     # Getting Home Data
+#     home_data = pd.read_csv("./ZILLOW_ZSFH_Filtered.csv")
+#     home_data = home_data[['zip_code','value']]
+#     # Getting Geometry
+#     map_us = gpd.read_file('./map/tl_2019_us_zcta510.shx')
+#     map_us = map_us[['ZCTA5CE10','geometry']]
+#     map_us.rename(columns = {'ZCTA5CE10' : 'zip_code'}, inplace = True)
+#     map_us['zip_code'] = map_us['zip_code'].astype(int)
+#     # Merging
+#     map_us = map_us.merge(home_data, on = 'zip_code')
+#     # Plotting
+#     maxVal = 3_000_000
+#     map_us.loc[map_us['value'] >= maxVal, 'value'] = maxVal
+#     map_us.plot(column = 'value',cmap = 'Spectral' ,legend = True)
+#     plt.show()
+#
+#
+# visualizeMap()
 
 #Show the histogram of data
 # sortHistogram("ZILLOW_ZSFH.csv")['value'].plot(kind='hist', bins=100, grid=True, range=[0, 1000000])
