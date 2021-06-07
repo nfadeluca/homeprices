@@ -33,24 +33,14 @@ def createSnapshot(date):
     This is the master function that uses the other helper methods to create a Zillow subset with the
     data for a specific month
     """
-
-
-
-def pullDataSubset():
-    """
-    @:returns Returns the unsorted but filtered dataframe
-    This function reads the Zillow data file and then outputs a csv file containing
-    only the home price data for a certain month and type of home
-    """
-    print("Opening up")
+    print("Opening up data file - this may take a second!")
     df = pd.read_csv("ZILLOW_DATA.csv")
     #The date here is the date that will be outputted
-    df = df.copy()[df['date'] == '2020-01-31']
+    df = df.copy()[df['date'] == date]
     #index = False gets rid of the first column
     df.to_csv("ZILLOW_JAN.csv", index = False)
     df = df.copy()[df['indicator_id'] == 'ZSFH']
     df.to_csv("ZILLOW_ZSFH.csv", index = False)
-
 
 def cleanRegionsMethod():
     """
