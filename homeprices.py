@@ -84,8 +84,6 @@ def cleanRegionsMethod():
             j.write('\n')
 
 
-cleanRegionsMethod()
-
 def addZipCodes(fileName):
     """
     @:param filename: The name of the file to populate with zip codes
