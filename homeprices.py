@@ -26,7 +26,8 @@ def pullDataSubset():
 def cleanRegionsMethod():
     """
     @:returns
-    //TODO Nicola please comment this function
+    This function cleans the data in the csv file to make sure that all 
+    spaces and unnecessary words such as zip are removed
     """
     final = []
     with open('ZILLOW_REGIONS.csv') as f:
