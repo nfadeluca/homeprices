@@ -18,7 +18,7 @@ C:/Users/nfade/Documents/GitHub/homeprices/map/tl_2019_us_zcta510.shx
 1. pullDataSubset takes original data file and retrieves specific month
    Also creates ZILLOW_ZSFH which contains indicator_id, region_id, date, and value
 
-2.  cleanRegionsMethod overwrites old regions file with new one that contains
+2.  clean   RegionsMethod overwrites old regions file with new one that contains
     only region and region_id columns
 
 3. sortHistogram sorts ZILLOW_ZSFH
