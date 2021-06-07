@@ -42,6 +42,7 @@ def pullDataSubset():
     df = df.copy()[df['indicator_id'] == 'ZSFH']
     df.to_csv("ZILLOW_ZSFH.csv", index = False)
 
+
 def cleanRegionsMethod():
     """
     Creates new ZILLOW_REGIONS csv file that overwrites the old one,
@@ -67,11 +68,14 @@ def cleanRegionsMethod():
             final.append(line[0])
     # Writing zip codes
     with open('ZILLOW_REGIONS.csv', 'w') as j:
+        j.write("region,region_id\n")
         for item in final:
             item = item.strip('\n')
             j.write(str(item))
             j.write('\n')
 
+
+cleanRegionsMethod()
 
 def addZipCodes(fileName):
     """
