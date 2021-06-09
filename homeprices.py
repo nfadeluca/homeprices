@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+import ntpath
+from time import sleep
+
 import quandl
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -33,30 +36,43 @@ def createSnapshot(date):
     This is the master function that uses the other helper methods to create a Zillow subset with the
     data for a specific month
     """
+    print("Verifying Prerequisite Files:")
+    if not ntpath.isfile("ZILLOW_REGIONS_CLEAN.csv"):
+        print("ZILLOW_REGIONS_CLEAN.csv not found, generating")
+        generateRegions()
+    if not ntpath.isfile("ZILLOW_ZSFH.csv"):
+        print("ZILLOW_ZSFH.csv not found, generating")
+        generateZSFH()
     print("Opening up data file - this may take a second!")
-    df = pd.read_csv("ZILLOW_DATA.csv")
-    #The date here is the date that will be outputted
+    df = pd.read_csv("ZILLOW_ZSFH.csv")
+    #Filter out the other dates in the file
     df = df.copy()[df['date'] == date]
     #index = False gets rid of the first column
     df.to_csv("ZILLOW_"+date+".csv", index = False)
-    df = df.copy()[df['indicator_id'] == 'ZSFH']
-    df.to_csv("ZILLOW_ZSFH.csv", index = False)
+    print("Adding zip codes")
+    addZipCodes("ZILLOW_"+date+".csv")
+    print("Filtering zip codes")
+    filterZipCodes("ZILLOW_"+date+".csv")
+    print("sorting by zip code")
+    sortByRegionId("ZILLOW_"+date+".csv")
 
-def cleanRegionsMethod():
+def generateRegions():
     """
     Creates new ZILLOW_REGIONS csv file that overwrites the old one,
     keeping only region and region_id columns.
     """
     final = []
+    df = pd.read_csv("ZILLOW-REGIONS.csv")
+    df.to_csv("ZILLOW_REGIONS_CLEAN.csv")
     # Opens ZILLOW_REGIONS and write only lines with zipcodes
-    with open('ZILLOW_REGIONS.csv') as f:
+    with open('ZILLOW_REGIONS_CLEAN.csv') as f:
         lines = f.readlines()
-        with open('ZILLOW_REGIONS_NEW.csv', 'w') as g:
+        with open('ZILLOW_REGIONS_CLEAN.csv', 'w') as g:
             for line in lines:
                 if 'zip' in line:
                     g.write(line)
     # Removing commas and joining newly written lines
-    with open('ZILLOW_REGIONS_NEW.csv') as h:
+    with open('ZILLOW_REGIONS_CLEAN.csv') as h:
         lines = h.readlines()
         for line in lines:
             line = line.split(',')
@@ -66,13 +82,18 @@ def cleanRegionsMethod():
             line = line.split(';')
             final.append(line[0])
     # Writing zip codes
-    with open('ZILLOW_REGIONS_NEW.csv', 'w') as j:
+    with open('ZILLOW_REGIONS_CLEAN.csv', 'w') as j:
         j.write("region,region_id\n")
         for item in final:
             item = item.strip('\n')
             j.write(str(item))
             j.write('\n')
 
+def generateZSFH():
+    df = pd.read_csv("ZILLOW_DATA.csv")
+    #index = False gets rid of the first column
+    df = df.copy()[df['indicator_id'] == 'ZSFH']
+    df.to_csv("ZILLOW_ZSFH.csv", index = False)
 
 def addZipCodes(fileName):
     """
@@ -82,7 +103,7 @@ def addZipCodes(fileName):
     """
     df = pd.read_csv(fileName)
     global regions
-    regions = pd.read_csv("ZILLOW_REGIONS.csv")
+    regions = pd.read_csv("ZILLOW_REGIONS_CLEAN.csv")
     df['zip_code'] = df['region_id'].apply(getZipCode)
     print("Outputting CSV file.")
     df.to_csv(fileName, index = False)
@@ -101,7 +122,6 @@ def getZipCode(region_id):
         print("Zip code found: " + str(zipCode))
     return zipCode
 
-
 def filterZipCodes(fileName):
     """
     @:param fileName: The file to be processed
@@ -112,7 +132,8 @@ def filterZipCodes(fileName):
     """
     with open(fileName, 'r') as file:
         rows = file.readlines()
-        with open('ZILLOW_ZSFH_Filtered.csv', 'w') as newfile:
+        #ZILLOW_ZSFH.csv is the wrong file, it needs to be writing to a different file.
+        with open('ZILLOW_ZSFH.csv', 'w') as newfile:
             for row in rows:
                 if 'None' not in row:
                     newfile.write(row)
@@ -129,17 +150,16 @@ def sortByRegionId(fileName):
     df.to_csv(fileName, index = False)
     return df.astype(int)
 
-
-def sortHistogram(fileName):
-    """
-    @:param fileName: The file to sort
-    @:returns The sorted dataframe
-    This method sorts the file by region_id and returns it
-    """
-    df = pd.read_csv(fileName)
-    df['value'] = pd.to_numeric(df['value'], errors='coerce')
-    df = df.sort_values(by='value')
-    return df
+# def sortHistogram(fileName):
+#     """
+#     @:param fileName: The file to sort
+#     @:returns The sorted dataframe
+#     This method sorts the file by region_id and returns it
+#     """
+#     df = pd.read_csv(fileName)
+#     df['value'] = pd.to_numeric(df['value'], errors='coerce')
+#     df = df.sort_values(by='value')
+#     return df
 
 # def visualizeMap():
 #     """
@@ -172,3 +192,4 @@ def sortHistogram(fileName):
 
 # filterZipCodes("ZILLOW_ZSFH.csv")
 # print(getZipCode(96817))
+createSnapshot("2020-01-31")
