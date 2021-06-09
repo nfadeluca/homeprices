@@ -43,7 +43,7 @@ def createSnapshot(date):
     if not ntpath.isfile("ZILLOW_ZSFH.csv"):
         print("ZILLOW_ZSFH.csv not found, generating")
         generateZSFH()
-    print("Opening up data file - this may take a second!")
+    print("Dependencies verified - opening up data file")
     df = pd.read_csv("ZILLOW_ZSFH.csv")
     #Filter out the other dates in the file
     df = df.copy()[df['date'] == date]
@@ -53,8 +53,9 @@ def createSnapshot(date):
     addZipCodes("ZILLOW_"+date+".csv")
     print("Filtering zip codes")
     filterZipCodes("ZILLOW_"+date+".csv")
-    print("sorting by zip code")
+    print("Sorting by zip code")
     sortByRegionId("ZILLOW_"+date+".csv")
+    print("Finished! ZILLOW_"+date+".csv is complete.")
 
 def generateRegions():
     """
@@ -63,7 +64,7 @@ def generateRegions():
     """
     final = []
     df = pd.read_csv("ZILLOW-REGIONS.csv")
-    df.to_csv("ZILLOW_REGIONS_CLEAN.csv")
+    df.to_csv("ZILLOW_REGIONS_CLEAN.csv", index=False)
     # Opens ZILLOW_REGIONS and write only lines with zipcodes
     with open('ZILLOW_REGIONS_CLEAN.csv') as f:
         lines = f.readlines()
@@ -106,6 +107,7 @@ def addZipCodes(fileName):
     regions = pd.read_csv("ZILLOW_REGIONS_CLEAN.csv")
     df['zip_code'] = df['region_id'].apply(getZipCode)
     print("Outputting CSV file.")
+    print("Found " + str(len(df.index)) + " zip codes!")
     df.to_csv(fileName, index = False)
 
 def getZipCode(region_id):
@@ -119,7 +121,7 @@ def getZipCode(region_id):
     if region_id in regions['region_id'].unique():
         zipCode = regions.loc[regions.region_id == region_id]
         zipCode = zipCode.iloc[0]['region']
-        print("Zip code found: " + str(zipCode))
+        #print("Zip code found: " + str(zipCode))
     return zipCode
 
 def filterZipCodes(fileName):
@@ -130,13 +132,10 @@ def filterZipCodes(fileName):
     has been added along with all of its zip codes. It filters the file by removing all of the
     "None" values inside of the zipcodes column.
     """
-    with open(fileName, 'r') as file:
-        rows = file.readlines()
-        #ZILLOW_ZSFH.csv is the wrong file, it needs to be writing to a different file.
-        with open('ZILLOW_ZSFH.csv', 'w') as newfile:
-            for row in rows:
-                if 'None' not in row:
-                    newfile.write(row)
+    df = pd.read_csv(fileName)
+    df = df[~df.zip_code.str.contains("None")]
+    df.drop(['indicator_id', 'date'], axis=1, inplace=True)
+    df.to_csv(fileName, index=False)
 
 def sortByRegionId(fileName):
     """
