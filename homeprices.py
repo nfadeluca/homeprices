@@ -32,43 +32,6 @@ C:/Users/nfade/Documents/GitHub/homeprices/map/tl_2019_us_zcta510.shx
 
 """
 
-def importDataFiles():
-    """
-    Retrieves DATA and REGIONS zip files from quandl and extracts
-    them from their respective zip files. Renames the extracted csv
-    files to a more readable name.
-    """
-    # ApiConfig key from Quandl account, nessecary for using Quandl API here
-    quandl.ApiConfig.api_key = 's6x8gXSardesDec_nbyH'
-
-    # Checking if ZILLOW_REGIONS already exists..
-    if (os.path.isfile("./ZILLOW_REGIONS.csv")):
-        print("ZILLOW_REGIONS already exists!")
-    else:
-        # Retrieving zipfile
-        quandl.export_table('ZILLOW/REGIONS', filename='./ZILLOW_REGIONS.zip')
-        # Unzipping the file and getting the CSV
-        with zipfile.ZipFile("./ZILLOW_REGIONS.zip", 'r') as zip_ref:
-            zip_ref.extractall("./")
-        # Removing zipfile and renaming CSV file
-        os.remove("ZILLOW_REGIONS.zip")
-        os.rename("ZILLOW_REGIONS_1a51d107db038a83ac171d604cb48d5b.csv", "ZILLOW_REGIONS.csv")
-    
-    # Checking if ZILLOW_DATA already exists..
-    if (os.path.isfile("./ZILLOW_DATA.csv")):
-        print("ZILLOW_DATA already exists!")
-    else:
-        # Retrieving zipfile
-        quandl.export_table('ZILLOW/DATA', filename='./ZILLOW_DATA.zip')
-        # Unzipping the file and getting the CSV
-        with zipfile.ZipFile("./ZILLOW_DATA.zip", 'r') as zip_ref:
-            zip_ref.extractall("./")
-        # Removing zipfile and renaming CSV file
-        os.remove("ZILLOW_DATA.zip")
-        os.rename("ZILLOW_DATA_962c837a6ccefddddf190101e0bafdaf.csv", "ZILLOW_DATA.csv")
-        
-importDataFiles()
-
 def createSnapshot(date):
     """
     :param date: The month you wish to pull in format '2020-01-21'
@@ -77,6 +40,7 @@ def createSnapshot(date):
     data for a specific month
     """
     print("Verifying Prerequisite Files:")
+    importDataFiles()
     if not ntpath.isfile("ZILLOW_REGIONS_CLEAN.csv"):
         print("ZILLOW_REGIONS_CLEAN.csv not found, generating")
         generateRegions()
@@ -97,13 +61,48 @@ def createSnapshot(date):
     sortByRegionId("ZILLOW_"+date+".csv")
     print("Finished! ZILLOW_"+date+".csv is complete.")
 
+def importDataFiles():
+    """
+    Retrieves DATA and REGIONS zip files from quandl and extracts
+    them from their respective zip files. Renames the extracted csv
+    files to a more readable name.
+    """
+    # ApiConfig key from Quandl account, necessary for using Quandl API here
+    quandl.ApiConfig.api_key = 's6x8gXSardesDec_nbyH'
+
+    # Checking if ZILLOW_REGIONS already exists..
+    if (os.path.isfile("./ZILLOW_REGIONS.csv")):
+        print("ZILLOW_REGIONS found")
+    else:
+        # Retrieving zipfile
+        quandl.export_table('ZILLOW/REGIONS', filename='./ZILLOW_REGIONS.zip')
+        # Unzipping the file and getting the CSV
+        with zipfile.ZipFile("./ZILLOW_REGIONS.zip", 'r') as zip_ref:
+            zip_ref.extractall("./")
+        # Removing zipfile and renaming CSV file
+        os.remove("ZILLOW_REGIONS.zip")
+        os.rename("ZILLOW_REGIONS_1a51d107db038a83ac171d604cb48d5b.csv", "ZILLOW_REGIONS.csv")
+
+    # Checking if ZILLOW_DATA already exists..
+    if (os.path.isfile("./ZILLOW_DATA.csv")):
+        print("ZILLOW_DATA found")
+    else:
+        # Retrieving zipfile
+        quandl.export_table('ZILLOW/DATA', filename='./ZILLOW_DATA.zip')
+        # Unzipping the file and getting the CSV
+        with zipfile.ZipFile("./ZILLOW_DATA.zip", 'r') as zip_ref:
+            zip_ref.extractall("./")
+        # Removing zipfile and renaming CSV file
+        os.remove("ZILLOW_DATA.zip")
+        os.rename("ZILLOW_DATA_962c837a6ccefddddf190101e0bafdaf.csv", "ZILLOW_DATA.csv")
+
 def generateRegions():
     """
     Creates new ZILLOW_REGIONS csv file that overwrites the old one,
     keeping only region and region_id columns.
     """
     final = []
-    df = pd.read_csv("ZILLOW-REGIONS.csv")
+    df = pd.read_csv("ZILLOW_REGIONS.csv")
     df.to_csv("ZILLOW_REGIONS_CLEAN.csv", index=False)
     # Opens ZILLOW_REGIONS and write only lines with zipcodes
     with open('ZILLOW_REGIONS_CLEAN.csv') as f:
@@ -231,4 +230,4 @@ def sortByRegionId(fileName):
 
 # filterZipCodes("ZILLOW_ZSFH.csv")
 # print(getZipCode(96817))
-#createSnapshot("2020-01-31")
+createSnapshot("2020-01-31")
